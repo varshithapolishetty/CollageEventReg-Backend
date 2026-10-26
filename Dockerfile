@@ -16,8 +16,12 @@ FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
-# Create a non-root application user for container security
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# Create a writable directory for the H2 database
+RUN mkdir -p /app/data \
+    && addgroup -S appgroup \
+    && adduser -S appuser -G appgroup \
+    && chown -R appuser:appgroup /app/data
+
 USER appuser
 
 # Copy jar from builder
